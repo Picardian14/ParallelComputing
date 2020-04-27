@@ -1,0 +1,14 @@
+1)
+Tira un segmentation fault...Cambié de lugar la sentenica de OMP y anduvo ¿tenía que ser anidado si no?
+
+2)
+
+3)
+Resultó al final hacer privadas i, j y k
+
+4)
+Los tiempos secuenciales no superaban al tiempo paralelizando con 4 threads. También se noto que incrementar la cantidad de threads no mejoraba la performance. 
+Analizando las salidas sin embargo se podían ver los distintos tiempos para cada thread. El hecho de que fuesen distintos indicaba que todos tenían tiempo ocioso mientras esperaban al thread que mas tiempo tardaba. Ese tiempo ocioso surgía por la división de tareas. Por defecto, omp for separa la iteración en partes iguales. Ésto da lugar a que si un thread tuvo más tiempo de CPU comparado con el resto este pueda terminar antes. 
+omp brinda una cláusula para cambiar la repartición de las iteraciones del for. Si usamos la opción de schedule(dynamic), ahora la división del for se hace por demanda. También se hace una división por chunks, sólo que no se asigna estáticamente. Ésto permite aprovechar al máximo los tiempos otorgados a cada hilo. 
+Las opciones para schedule son:
+

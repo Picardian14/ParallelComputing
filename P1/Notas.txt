@@ -1,0 +1,114 @@
+1) Tiempo de ejecucion normal: 0.041599 seg
+La Demora esta en la representacion de matrices con arreglos unidimensionales. Ademas utiliza hace un llamado de funcion por cada valor que quiere extraer.
+Pruebo haciendo un arreglo de arreglos
+Tiempo de Ejecucion alternativa: 0.005758
+
+Matriz de 512
+TN: 2.454419
+TA: 0.772033
+
+Matriz de 1024
+TN: 67.547807
+TA: 11.379535
+
+Matriz de 2048
+TN: 611 (10 min lol)
+TA: 125 (2 min)
+
+
+2)
+Lo que hace .....
+
+
+3)
+El compilador de GCC ofrece niveles de optimización que implican mayor tiempo de compilación.
+Por defecto, el compilador intentará compilar lo más rápido y permitirá el debug. Al optimizar ésto no se 
+realiza. La optimización que realiza es en base a la información que tiene del programa. Al compilar varios 
+archivos en simultáneo, puede tomar más información ya que toma de cada archivo, logrando mayor optimización
+Las opciones son:
+-> O0. optimización para tiempo de compilación (default)
+-> O1. optimización para tamaño de código y tiempo de ejecución
+-> O2. optimización para tamaño de código y mejor tiempo de ejecución
+-> O3. optimización para tamaño de código y aun mejortiempo de ejecución
+Los ultimos tres incrementan también el tiempo de compilación, y los tres
+requieren también algo más de memoria
+-> Os. optimizar para tamaño de código. Requiere bastante más memoria
+-> Ofast. es el nivel O3, pero con cálculos rápidos y no exactos. Reduce el tiempo
+tanto como O3 y tiene similar uso de memoria y tiempo de compilación
+
+Compilación de algoritmos 1 y 2.
+1. Todas las optimizaciones llevan el mismo tiempo. Ofast un poco más de tiempo. 
+Matriz de 512
+TN: 0.218727
+TA: 0.156500
+
+Matriz de 1024
+TN: 13.583613
+TA: 3.429616
+
+4) De Willy
+El algoritmo es eficiente, aprovecha las localidades temporal y espacial guardando la matriz B en memoria por columnas, y la matriz A y C por filas.
+Se puede optimizar en el seteo de las matrices, algunas condiciones if son innecesarias. No obstante el tiempo de mejora respecto a esto es irrelevante.
+Respecto a la optimización de memoria, se podría no almacenar los 0 de la matriz diagonal, ya que sabemos que en esas posiciones siempre tendremos el valor 0
+
+
+5)
+a.La resolución del problema se hace utilizando el método de Bhaskara. Con flags optimización no se nota una diferencia
+Aunque ambas soluciones son aproximadamente las mismas, las soluciones utilizando Double son más precisas 
+por ende, representan mejor a las raíces
+
+
+b. 
+Tiempos tomados con optimizacion O2
+TIMES = 100
+Tiempo requerido solucion Double: 1.787255
+Tiempo requerido solucion Float: 1.796271
+TIMES = 1000
+Tiempo requerido solucion Double: 18.329043
+Tiempo requerido solucion Float: 19.333964
+TIMES = 10000
+Tiempo requerido solucion Double: 195.740747
+Tiempo requerido solucion Float: 231.222910
+
+Se puede notar que el tiempo de ejecución es aproximandamente lineal, por el incriemento linealmente proporcional
+de los tiempos con respoecto al tamaño de TIMEs. Además se nota una leve diferencia entre los tiempos que requiere 
+la computación usando doubles y floats, donde float requiere más tiempo.
+
+c.
+TIMES = 100
+Tiempo requerido solucion Double: 1.930977
+Tiempo requerido solucion Float: 1.030490
+TIMES = 1000
+Tiempo requerido solucion Double: 19.935203
+Tiempo requerido solucion Float: 11.045366
+TIMES = 10000
+Tiempo requerido solucion Double: 214.181597
+Tiempo requerido solucion Float: 130.988166
+
+Hay 2 diferencias entre quadratic2 y quadratic3. Primero que se definen Macros para cada variable, aunque esto
+no pareciera incidir en el tiempo de ejecución
+La otra diferencia es que para el cálculo con los vectores de float, se utiliza la función powf en lugar de pow 
+Si vemos el protoipo de ambas funciones vemos que pow espera dos double, y powf espera dos floats. Es decir que
+en quadratic2 se está casteando a los floats, y cálculándolos como double. En cambio en quadratic3 directamente
+se los trata como float. Se puede notar que los tiempos ahora son más lentos para double en lugar de float.
+Aun más, los tiempos con float en quadratic3 superan los tiempos de double en quadratic2.
+6) 
+Al ejecutar el código se puede ver que los tiempos de ejecución para el método recursivo son mucho más grandes
+que el método iterativo. Con N = 10 tarda 0.0000010967 y con N = 20 salta a 0.0001110012 tardando unas 100 veces más
+Por el otro lado para N = 10, el método iterativo demora 0.0000001907 y con N = 20 4053, lo cual es aproximadamente
+el doble; es decir, es lineal, donde el recursivo es exponencial
+Esto se debe a que para cada llamado de la función se realizan otras dos, por lo que la demanda de memoria
+para almacenar en el stack de usuario crece exponencialmente, por ende se forma un cuello de botella
+
+7) 
+El primer cálculo es más rápido que el segundo. Ésto se puede deber a la cantidad de 
+operaciones realizadas por cada iteración. 
+
+8)
+
+9)
+
+10) ¿hay un diferencia?
+
+12)
+
