@@ -16,6 +16,15 @@ sem_t a_min_sem, a_max_sem;
 sem_t b_min_sem, b_max_sem;
 sem_t c_min_sem, c_max_sem;
 
+double dwalltime(){
+        double sec;
+        struct timeval tv;
+
+        gettimeofday(&tv,NULL);
+        sec = tv.tv_sec + tv.tv_usec/1000000.0;
+        return sec;
+}
+
 void * product (void* ptr)
 {
     int *p, id;
@@ -132,6 +141,7 @@ int main(int argc, char *argv[])
     a_max, b_max, c_max = 0;
     a_cant, b_cant, c_cant = 0;
     double a_avg, b_avg, c_avg;
+    double ticktick;
     pthread_attr_t attr;
     pthread_t threads[T];
     int ids[T];
@@ -163,7 +173,7 @@ int main(int argc, char *argv[])
             B[N*row+col] = 2.0;
         }
     }
-
+    ticktick = dwalltime();
     for(int t=0; t<T; t++)
     {
         ids[t] = t;
@@ -188,15 +198,8 @@ int main(int argc, char *argv[])
     {
         pthread_join(threads[t], NULL);
     }
-    
-    for(int col=0 ; col < N; col++){
-        if (col == N-1){
-            printf("%f \n", D[col]);
-        }
-        else{
-            printf("%f ", D[col]);
-        }
-    }    
+    ticktick = dwalltime() - ticktick;
+    printf("Tiempo de ejecucion: %f", ticktick);
     return 0;
     
 }
