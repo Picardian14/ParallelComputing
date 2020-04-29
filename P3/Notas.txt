@@ -12,3 +12,4 @@ Analizando las salidas sin embargo se podían ver los distintos tiempos para cad
 omp brinda una cláusula para cambiar la repartición de las iteraciones del for. Si usamos la opción de schedule(dynamic), ahora la división del for se hace por demanda. También se hace una división por chunks, sólo que no se asigna estáticamente. Ésto permite aprovechar al máximo los tiempos otorgados a cada hilo. 
 Las opciones para schedule son:
 
+5)
