@@ -15,33 +15,30 @@ double dwalltime(){
 
 //Funcion que calcula el maximo de una matriz
 double max (double * matriz, int N ){
-    double max=-1;
+    double vmax=-1;
     int i;
-    
     for (i=0;i<N*N;i++)
-        if (matriz[i] < max)
-            max=matriz[i];
+        if (matriz[i] < vmax)
+            vmax=matriz[i];
 
-    return max;
+    return vmax;
 }
 
 //Funcion que calcula el minimo de una matriz
 double min (double * matriz, int N ){
-    double min=101;
+    double vmin=101;
     int i;
-    
     for (i=0;i<N*N;i++)
-        if (matriz[i] < min)
-            min=matriz[i];
+        if (matriz[i] < vmin)
+            vmin=matriz[i];
     
-    return min;
+    return vmin;
 }
 
 //Funcion que calcula el promedio de una matriz
 double avg (double * matriz, int N ){
     double avg=0;
     int i;
-
     for (i=0;i<N*N;i++)
         avg += matriz[i];
 
@@ -52,16 +49,17 @@ double avg (double * matriz, int N ){
 int main(int argc,char*argv[]){
 
  double *A,*B,*C,*D,*resul_intermedio,maxA,maxB,maxC,minA,minB,minC,avgA,avgB,avgC;
- int cons,i,j,k,s,check=1;
+ int cons,i,j,k,check=1;
  double timetick;
 
  //Controla los argumentos al programa
- if (argc != 2){
-   printf("\n Error en el pasaje de parametros, solo se espera la dimension de la matris");
+ if (argc != 3){
+   printf("\n Faltan argumentos:: N dimension de la matriz, T cantidad de threads \n");
    return 0;
  }
  int N=atoi(argv[1]);
- 
+ int numThreads=atoi(argv[2]);
+ omp_set_num_threads(numThreads);
 
  //Reservo memoria
  A=(double*)malloc(sizeof(double)*N*N);
@@ -70,12 +68,12 @@ int main(int argc,char*argv[]){
  D=(double*)malloc(sizeof(double)*N*N);
  resul_intermedio=(double*)malloc(sizeof(double)*N*N);
 
+ #pragma omp parallel private(i,j,k)
+ { 
+
  //seteo las vmatrices, A con numeros random, inter,D, B y C en 0 para luego setear la diagonal con 1, todas las matrices se almacenaran orientado a filas, ya que 
  //las unicas que accederia por colomnas serian B y C pero como estas son la matris identidad es lo mismo accederlas por filas o columnas
-
- 
-
- 
+ #pragma omp for
  for(i=0;i<(N*N);i++){
 	A[i]=rand()%100;
     B[i]=0.0;
@@ -84,29 +82,49 @@ int main(int argc,char*argv[]){
     resul_intermedio[i]=0.0;
  }
  //seteo las diagonales en 1 y tengo la matriz identidad
-	for (i=0; i<N; i++){
-		B[i*N+i]= 1.0;
-        C[i*N+i]= 1.0;
-	}
+ #pragma omp for 
+ for (i=0; i<N; i++){
+	B[i*N+i]= 1.0;
+    C[i*N+i]= 1.0;
+ }
+ //inicio el timer
+ #pragma omp single 
+ {
+ timetick = dwalltime();
+ }
+
  //Calculo los maximos, minimos y promedios
- maxA = max(A,N);
- maxB = max(B,N);
- maxC = max(C,N);
- minA = min(A,N);
- minB = min(B,N);
- minC = min(C,N);
- avgA = avg(A,N);
- avgB = avg(B,N);
- avgC = avg(C,N);
+ #pragma omp sections
+ {
+ #pragma omp section    
+    maxA = max(A,N);
+ #pragma omp section 
+     maxB = max(B,N);
+ #pragma omp section  
+     maxC = max(C,N);
+ #pragma omp section 
+    minA = min(A,N);
+ #pragma omp section 
+     minB = min(B,N);
+ #pragma omp section 
+     minC = min(C,N);
+ #pragma omp section 
+     avgA = avg(A,N);
+ #pragma omp section  
+     avgB = avg(B,N);
+ #pragma omp section      
+     avgC = avg(C,N);
+ }//fin de sections
 
  //calculo la constante multiplicativa de las matrices
+ #pragma omp single 
+ {
  cons = ((maxA*maxB*maxC)-(minA*minB*minC))/(avgA*avgB*avgC);
-
+ }
  //calculo el producto de matrices
 
  //Realizo la primera parte de la multiplicacion resul_intermedio= A*B
-  timetick = dwalltime();
-
+  #pragma omp for 
   for(i=0;i<N;i++){
    for(j=0;j<N;j++){
     for(k=0;k<N;k++){
@@ -114,20 +132,22 @@ int main(int argc,char*argv[]){
     }
    }
   } 
- //Realizo la segunda multiplicacion    
+ //Realizo la segunda multiplicacion  
+  #pragma omp for  
   for(i=0;i<N;i++){
    for(j=0;j<N;j++){
     for(k=0;k<N;k++){
-    D[i*N+j] = D[i*N+j] + resul_intermedio[i*N+k] * C[j*N+k]; 
+        D[i*N+j] = D[i*N+j] + resul_intermedio[i*N+k] * C[j*N+k]; 
     }
    }
   }
- //realizo la multiplicacion del resultado de A*B*C con la constante que calculamos previamente 
+ //realizo la multiplicacion del resultado de A*B*C con la constante que calculamos previamente
+ #pragma omp for 
  for (i=0;i<N*N;i++)
     D[i]= D[i]*cons;
 
- printf("Tiempo en segundos de procesamiento %f\n", dwalltime() - timetick);
-
+ }//fin del parallel
+ printf(" Tiempo en segundos de procesamiento %f \n", dwalltime() - timetick);
  //Verificacion del resultado
  printf("\n Realizando comprobacion ... \n" );
  for (i=0;i<N*N ;i++ )
@@ -142,5 +162,11 @@ int main(int argc,char*argv[]){
  }else{
      printf(" Error en la multiplicacion \n");
  }
-
+ 
+ free(A);
+ free(B);
+ free(C);
+ free(D);
+ free(resul_intermedio);
+ return(0);
 }
