@@ -147,7 +147,7 @@ int main(int argc,char*argv[]){
     D[i]= D[i]*cons;
 
  }//fin del parallel
- printf(" Tiempo en segundos de procesamiento %f \n", dwalltime() - timetick);
+ printf(" Tiempo en segundos de procesamiento de matriz %ix%i con %d hilos: %f\n",N,N,numThreads, dwalltime() - timetick);
  //Verificacion del resultado
  printf("\n Realizando comprobacion ... \n" );
  for (i=0;i<N*N ;i++ )

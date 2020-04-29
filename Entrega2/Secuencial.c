@@ -126,7 +126,7 @@ int main(int argc,char*argv[]){
  for (i=0;i<N*N;i++)
     D[i]= D[i]*cons;
 
- printf("Tiempo en segundos de procesamiento %f\n", dwalltime() - timetick);
+ printf(" Tiempo en segundos de procesamiento de matriz %ix%i : %f\n",N,N, dwalltime() - timetick);
 
  //Verificacion del resultado
  printf("\n Realizando comprobacion ... \n" );
