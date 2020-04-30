@@ -51,6 +51,7 @@ void * product (void* ptr)
             D[N*row+col] *= scalar;
         }
     }
+    
 }
 
 void * min_max_avg(void *ptr)
@@ -126,6 +127,7 @@ void * min_max_avg(void *ptr)
     if (c_local_max > c_max)
         c_max = c_local_max;
     sem_post(&c_max_sem);
+
 }
 
 int main(int argc, char *argv[])
