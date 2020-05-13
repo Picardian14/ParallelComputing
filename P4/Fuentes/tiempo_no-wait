@@ -1,0 +1,62 @@
+Tiempo transcurrido 0.000000 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 1)
+Tiempo transcurrido 0.000034 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000070 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000091 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 2)
+Tiempo transcurrido 0.000103 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000132 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000144 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 3)
+Tiempo transcurrido 0.000155 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000181 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000191 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 4)
+Tiempo transcurrido 0.000202 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000226 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000236 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 5)
+Tiempo transcurrido 0.000274 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000303 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000313 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 6)
+Tiempo transcurrido 0.000324 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000350 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000353 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 7)
+Tiempo transcurrido 0.000362 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000373 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000377 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 8)
+Tiempo transcurrido 0.000381 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000393 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000397 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 9)
+Tiempo transcurrido 0.000401 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000412 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000417 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 10)
+Tiempo transcurrido 0.000421 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000433 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000438 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 11)
+Tiempo transcurrido 0.000442 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000449 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000453 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 12)
+Tiempo transcurrido 0.000456 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000463 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000467 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 13)
+Tiempo transcurrido 0.000470 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000479 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000484 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 14)
+Tiempo transcurrido 0.000489 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000499 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+Tiempo transcurrido 0.000503 (s):	proceso 0, llamando a MPI_IRecv() [no bloqueante] (fuente rank 15)
+Tiempo transcurrido 0.000507 (s):	proceso 0, MPI_IRecv() devolvio el control..
+					..pero el mensaje no fue aun recibido..
+Tiempo transcurrido 0.000517 (s):	proceso 0, operacion receive completa con mensaje: No deberia estar leyendo esta frase.
+
+Tiempo total = 0.000001 (s)

@@ -6,7 +6,8 @@
 /* Time in seconds from some point in the past */
 double dwalltime();
 
-void producto(double *A,double *B,double *C, int r,int N,int sizeMatrix,int sizeBlock);
+void producto(double *A,double *B,double *C, double *D,double *E,double *F,double *R1,double *R2,double *R3, int r,int N,int sizeMatrix,int sizeBlock);
+void suma(double *R1, double *R2,double *R3, int dim);
 void crearIdentidad(double *S, int sizeBlock, int sizeMatrix,int N,int r);
 void crearMatriz(double *S, int sizeMatrix);
 void imprimeMatriz(double *S,int N,int r);
@@ -18,6 +19,12 @@ int main (int argc, char *argv[]){
  double *A; // Matriz A
  double *B; // Matriz B
  double *C; // Matriz C
+ double *D; // Matriz A
+ double *E; // Matriz B
+ double *F; // Matriz C
+ double *R1; // Matriz A
+ double *R2; // Matriz B
+ double *R3; // Matriz C
  double timetick;
 
 
@@ -44,12 +51,22 @@ if (argc < 4){
  A= (double *)malloc(sizeMatrix*sizeof(double)); //aloca memoria para A
  B= (double *)malloc(sizeMatrix*sizeof(double)); //aloca memoria para B
  C= (double *)malloc(sizeMatrix*sizeof(double)); //aloca memoria para C
-
+ D= (double *)malloc(sizeMatrix*sizeof(double)); //aloca memoria para A
+ E= (double *)malloc(sizeMatrix*sizeof(double)); //aloca memoria para B
+ F= (double *)malloc(sizeMatrix*sizeof(double));
+ R1= (double *)malloc(sizeMatrix*sizeof(double)); //aloca memoria para A
+ R2= (double *)malloc(sizeMatrix*sizeof(double)); //aloca memoria para B
+ R3= (double *)malloc(sizeMatrix*sizeof(double));
  crearMatriz(A, sizeMatrix);			//Inicializa A 
  crearIdentidad(B,sizeBlock,sizeMatrix,N,r); //Inicializa B como matriz identidad
+ crearMatriz(C, sizeMatrix);			//Inicializa A 
+ crearIdentidad(D,sizeBlock,sizeMatrix,N,r); //Inicializa B como matriz identidad
+ crearMatriz(E, sizeMatrix);			//Inicializa A 
+ crearIdentidad(F,sizeBlock,sizeMatrix,N,r); //Inicializa B como matriz identidad
 
   timetick = dwalltime();
- producto(A,B,C,r,N,sizeMatrix,sizeBlock);
+ producto(A,B,C,D,E,F,R1,R2,R3,r,N,sizeMatrix,sizeBlock);
+ suma(R1,R2,R3, n);
   printf("Tiempo en segundos %f \n", dwalltime() - timetick);
 
 //tiempo
@@ -75,9 +92,9 @@ if (argc < 4){
  printf(" \n\n Realizando comprobacion ... \n" );
  /*for (i=0;i<sizeMatrix ;i++ )
  {
-	 if (A[i]!=C[i])
+	 if (R1[i]!=3)
 	 {
-       printf("\n Error %f", C[i] );
+       printf("\n Error %f", R1[i] );
 	 }
  }*/
 //imprimir tiempo
@@ -85,18 +102,27 @@ if (argc < 4){
  free(A);
  free(B);
  free(C);
+ free(D);
+ free(E);
+ free(F);
+ free(R1);
+ free(R2);
+ free(R3);
 
  return 0;
 } //FIN MAIN
 
 
 //SOLO PARA MATRICES DE IGUAL DIMENSION DE BLOQUES (N)
-void producto(double *A,double *B,double *C, int r,int N,int sizeMatrix, int sizeBlock){
+void producto(double *A,double *B,double *C, double *D,double *E,double *F,double *R1,double *R2,double *R3, int r,int N,int sizeMatrix,int sizeBlock){
    int I,J,K,i,j,k;
    int despA, despB, despC,desp;
 
- for (i=0; i<sizeMatrix ;i++)
-	  C[i]=0.0;
+ for (i=0; i<sizeMatrix ;i++){
+	  R1[i]=0.0;
+    R2[i]=0.0;
+    R3[i]=0.0;
+    }
  
 	for (I=0;I<N;I++){
 		for (J=0;J<N;J++){
@@ -108,13 +134,23 @@ void producto(double *A,double *B,double *C, int r,int N,int sizeMatrix, int siz
 					for (j=0;j<r;j++){
 						desp = despC + i*r+j;
 						for (k=0;k<r;k++){
-							C[desp] += A[despA + i*r+k]*B[despB + k*r+j]; 
+							R1[desp] += A[despA + i*r+k]*B[despB + k*r+j]; 
+              R2[desp] += C[despA + i*r+k]*D[despB + k*r+j]; 
+              R3[desp] += E[despA + i*r+k]*F[despB + k*r+j]; 
 						};
 					}
 				};
 			};
 		};	
 	}; 
+}
+void suma(double *R1,double *R2,double *R3, int dim)
+{
+  for (int i=0; i<dim;i++){
+    for (int j=0; j<dim; j++){
+      R1[i*dim+j] = R1[i*dim+j] + R2[i*dim+j] + R3[i*dim+j];
+    }
+  }
 }
 
 

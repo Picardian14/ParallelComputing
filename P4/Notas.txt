@@ -1,0 +1,29 @@
+2)
+El master que ejecuta codigo no bloqueante devuelve el control antes que el resto. Pero si se quita la sentencia de espera, el master ejecutara su codigo de que puedan modifcar el mensaje los demas procesos
+
+3)
+El algoritmo blqueante tarda mas, ya que para cada comunicacion los procesos se bloquean, teniendo el proceso que recibira el mensaje que esperar al emisor. En el otro algoritmo se manda el mensaje y se espera la petiticon sin tomar control, y todas las comunicaciones pueden ocurrir en paralelos
+
+4)
+Si se cambian las comunicaciones punto a punto por comunicaciones colectivas se logra una mejora en los tiempos de comunicacion. Estas hacen uso de distintas técnicas de comunicación entre procesos, como árboles de enlaces, para reducir los tiempos de comunicaciones
+
+t_sec (bloques practica 1) matriz de 2048: 34.899
+t_par con comunicacion colectiva MPI 2048: 10.298
+
+speedup = 3.38 , eficiencia (4 procesadores) = 0.847
+
+5)
+
+t_sec (agregado pedorro a bloques prac 1) 2048: 104.656166
+
+t_par 2048: 34.148919	Tiempo comunicacion=1.284141
+
+6)
+
+t_sec (for iterando sobre el arreglo)2^22: 0.011267
+
+t_par 2^22: 0.009203
+
+7)
+
+
