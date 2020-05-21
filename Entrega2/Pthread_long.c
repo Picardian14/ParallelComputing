@@ -12,9 +12,10 @@ double a_max, b_max, c_max;
 double a_avg, b_avg, c_avg;
 double scalar;
 
-pthread_mutex_t a_cant_mutex;
+pthread_mutex_t a_cant_mutex, b_cant_mutex, c_cant_mutex;
 pthread_mutex_t a_min_mutex, a_max_mutex;
-
+pthread_mutex_t b_min_mutex, b_max_mutex;
+pthread_mutex_t c_min_mutex, c_max_mutex;
 
 
 pthread_barrier_t barrier;
@@ -28,6 +29,34 @@ double dwalltime(){
         return sec;
 }
 
+void * product (void* ptr)
+{
+    int *p, id;
+    p = (int *) ptr;
+    id = *p;
+    int row, col, start, end;
+    int L = N / T;
+    start = id*L;
+    end = (id+1)*L;
+    for(row=start; row < end; row++)
+    {
+        for(col=0 ; col < N; col++)
+        {
+            for(int k=0;k < N; k++)
+                temp_AB[N*row+col] += A[N*row+k]*B[N*col+k];
+        }
+    }
+    for(row=start; row < end; row++)
+    {
+        for(col=0 ; col < N; col++)
+        {
+            for(int k=0;k < N; k++)
+                D[N*row+col] += temp_AB[N*row+k]*C[N*col+k];
+            D[N*row+col] *= scalar;
+        }
+    }
+    
+}
 
 void * min_max_avg(void *ptr)
 {
@@ -66,50 +95,61 @@ void * min_max_avg(void *ptr)
 
     pthread_mutex_lock(&a_cant_mutex);
     a_cant+=a_local_cant;
-    b_cant+=b_local_cant;    
-    c_cant+=c_local_cant;
     pthread_mutex_unlock(&a_cant_mutex);
+
+    pthread_mutex_lock(&b_cant_mutex);
+    b_cant+=b_local_cant;    
+    pthread_mutex_unlock(&b_cant_mutex);
+
+    pthread_mutex_lock(&c_cant_mutex);
+    c_cant+=c_local_cant;
+    pthread_mutex_unlock(&c_cant_mutex);
 
     pthread_mutex_lock(&a_min_mutex);
     if (a_local_min < a_min)
-        a_min = a_local_min;        
-    if (b_local_min < b_min)
-        b_min = b_local_min;
-    if (c_local_min < c_min)
-        c_min = c_local_min;    
+        a_min = a_local_min;
     pthread_mutex_unlock(&a_min_mutex);
-
     pthread_mutex_lock(&a_max_mutex);
     if (a_local_max > a_max)
-        a_max = a_local_max;    
-    if (b_local_max > b_max)
-        b_max = b_local_max;
-    if (c_local_max > c_max)
-        c_max = c_local_max;
+        a_max = a_local_max;
     pthread_mutex_unlock(&a_max_mutex);
 
+    pthread_mutex_lock(&b_min_mutex);
+    if (b_local_min < b_min)
+        b_min = b_local_min;
+    pthread_mutex_unlock(&b_min_mutex);
+    pthread_mutex_lock(&b_max_mutex);
+    if (b_local_max > b_max)
+        b_max = b_local_max;
+    pthread_mutex_unlock(&b_max_mutex);
 
-    if(id == 0)
-    {
-        a_avg = (double)a_cant/(double)N;
-        b_avg = (double)b_cant/(double)N;
-        c_avg = (double)c_cant/(double)N;
-        double diff_temp = (a_max*b_max*c_max - a_min*b_min*c_min);
-        double avg_temp =(a_avg*b_avg*c_avg);
-        scalar = diff_temp/avg_temp;
-    }
+    pthread_mutex_lock(&c_min_mutex);
+    if (c_local_min < c_min)
+        c_min = c_local_min;
+    pthread_mutex_unlock(&c_min_mutex);
+    pthread_mutex_lock(&c_max_mutex);
+    if (c_local_max > c_max)
+        c_max = c_local_max;
+    pthread_mutex_unlock(&c_max_mutex);
+
     pthread_barrier_wait(&barrier);
-    for(int i=s; i < e ; i++)
+    a_avg = (double)a_cant/(double)N;
+    b_avg = (double)b_cant/(double)N;
+    c_avg = (double)c_cant/(double)N;
+    double diff_temp = (a_max*b_max*c_max - a_min*b_min*c_min);
+    double avg_temp =(a_avg*b_avg*c_avg);
+    scalar = diff_temp/avg_temp;
+    for(int i=0; i < N ; i++)
     {
-        for(int j=0; j<N;j++)
+        for(int j=s; j<e;j++)
         {
             for(int k=0;k < N; k++)
                 temp_AB[N*i+j] += A[N*i+k]*B[N*j+k];
         }
     }
-    for(int i=s; i < e ; i++)
+    for(int i=0; i < N ; i++)
     {
-        for(int j=0; j<N;j++)
+        for(int j=s; j<e;j++)
         {
             for(int k=0;k < N; k++)
                 D[N*i+j] += temp_AB[N*i+k]*C[N*j+k];
@@ -137,10 +177,15 @@ int main(int argc, char *argv[])
     pthread_t threads[T];
     int ids[T];
     pthread_attr_init(&attr);
-    pthread_mutex_init(&a_cant_mutex, NULL);    
+    pthread_mutex_init(&a_cant_mutex, NULL);
+    pthread_mutex_init(&b_cant_mutex, NULL);
+    pthread_mutex_init(&c_cant_mutex, NULL);
     pthread_mutex_init(&a_min_mutex, NULL);
     pthread_mutex_init(&a_max_mutex, NULL);
-    
+    pthread_mutex_init(&b_min_mutex, NULL);
+    pthread_mutex_init(&b_max_mutex, NULL);
+    pthread_mutex_init(&c_min_mutex, NULL);
+    pthread_mutex_init(&c_max_mutex, NULL);
 
     pthread_barrier_init(&barrier, NULL, T);
 
