@@ -8,8 +8,7 @@ int main(int argc, char* argv[]){
 	int i, j, k, numProcs, rank, n, stripSize, check=1;
 	double * A,*A_B , *B, *C,*D, local_max[3], local_min[3], local_avg[3], max[3], min[3], avg[3], escalar;
 	MPI_Status status;
-	double commTimes[8], maxCommTimes[8], minCommTimes[8], commTime, totalTime;
-    double procTimes[6], maxprocTimes[6], minprocTimes[6], procTime;
+	double commTimes[8], maxCommTimes[8], minCommTimes[8], commTime, totalTime, procTime;
 
 	/* Lee par�metros de la l�nea de comando */
 	if ((argc != 2) || ((n = atoi(argv[1])) <= 0) ) {
@@ -80,7 +79,7 @@ int main(int argc, char* argv[]){
 
     
 	commTimes[1] = MPI_Wtime();
-    procTimes[0] = MPI_Wtime();
+
 	/* computo de los maximos, minimos y promedios*/
     //computo de A
 	for (i=0; i<n*stripSize; i++){
@@ -106,42 +105,38 @@ int main(int argc, char* argv[]){
             local_max[2] = C[i];
         local_avg[2] += C[i]; 
 	}
-    
-    procTimes[1] = MPI_Wtime();
+
+    local_avg[0] = local_avg[0]/(n*n);
+    local_avg[1] = local_avg[1]/(n*n);
+    local_avg[2] = local_avg[2]/(n*n);
 
     commTimes[2] = MPI_Wtime();
 
-    MPI_Reduce(&local_min[0], &min[0], 1, MPI_DOUBLE, MPI_MIN, COORDINATOR , MPI_COMM_WORLD);
-    MPI_Reduce(&local_min[1], &min[1], 1, MPI_DOUBLE, MPI_MIN, COORDINATOR , MPI_COMM_WORLD);
-    MPI_Reduce(&local_min[2], &min[2], 1, MPI_DOUBLE, MPI_MIN, COORDINATOR , MPI_COMM_WORLD);
-    MPI_Reduce(&local_max[0], &max[0], 1, MPI_DOUBLE, MPI_MAX, COORDINATOR , MPI_COMM_WORLD);
-    MPI_Reduce(&local_max[1], &max[1], 1, MPI_DOUBLE, MPI_MAX, COORDINATOR , MPI_COMM_WORLD); 
-    MPI_Reduce(&local_max[2], &max[2], 1, MPI_DOUBLE, MPI_MAX, COORDINATOR , MPI_COMM_WORLD); 
-    MPI_Reduce(&local_avg[0], &avg[0], 1, MPI_DOUBLE, MPI_SUM, COORDINATOR , MPI_COMM_WORLD); 
-    MPI_Reduce(&local_avg[1], &avg[1], 1, MPI_DOUBLE, MPI_SUM, COORDINATOR , MPI_COMM_WORLD);
-    MPI_Reduce(&local_avg[2], &avg[2], 1, MPI_DOUBLE, MPI_SUM, COORDINATOR , MPI_COMM_WORLD);
+    MPI_Allreduce(&local_min[0], &min[0], 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_min[1], &min[1], 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_min[2], &min[2], 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_max[0], &max[0], 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_max[1], &max[1], 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD); 
+    MPI_Allreduce(&local_max[2], &max[2], 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD); 
+    MPI_Allreduce(&local_avg[0], &avg[0], 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD); 
+    MPI_Allreduce(&local_avg[1], &avg[1], 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_avg[2], &avg[2], 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
     commTimes[3] = MPI_Wtime();
     //calculamos el escalar
 
-    procTimes[2] = MPI_Wtime();
-    if (rank==COORDINATOR) {
-        avg[0] = avg[0]/(n*n);
-        avg[1] = avg[1]/(n*n);
-        avg[2] = avg[2]/(n*n);
+    escalar = ((max[0]*max[1]*max[2])-(min[0]*min[1]*min[2]))/(avg[0]*avg[1]*avg[2]);
+    if(rank==0){
         printf("Max: %lf \tMin: %lf \tAvg: %lf \t\n", max[1], min[1], avg[1]);
         printf("Max: %lf \tMin: %lf \tAvg: %lf \t\n", max[2], min[2], avg[2]);
         printf("Max: %lf \tMin: %lf \tAvg: %lf \t\n", max[0], min[0], avg[0]);
-        escalar = ((max[0]*max[1]*max[2])-(min[0]*min[1]*min[2]))/(avg[0]*avg[1]*avg[2]);
         printf("Escalar %f\n\n",escalar);
-    }  
-    procTimes[3] = MPI_Wtime();
+    }
     
     commTimes[4] = MPI_Wtime();
 
     MPI_Barrier(MPI_COMM_WORLD);
     //2da distribucion de datos (A ya fue distribuido)
-    MPI_Bcast(&escalar,1, MPI_DOUBLE, COORDINATOR, MPI_COMM_WORLD);
     MPI_Bcast(B, n*n, MPI_DOUBLE, COORDINATOR, MPI_COMM_WORLD);
     MPI_Bcast(C, n*n, MPI_DOUBLE, COORDINATOR, MPI_COMM_WORLD);
     MPI_Scatter(A_B, stripSize*n, MPI_DOUBLE, A_B, stripSize*n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -149,7 +144,6 @@ int main(int argc, char* argv[]){
 
     commTimes[5] = MPI_Wtime();
 
-    procTimes[4] = MPI_Wtime();
     //Computacion parcial
     for (i=0; i<stripSize; i++) {
 		for (j=0; j<n ;j++ ) {
@@ -168,21 +162,15 @@ int main(int argc, char* argv[]){
             D[i*n+j] *= escalar;
 		}
 	}
-    procTimes[5] = MPI_Wtime();
-
 
     commTimes[6] = MPI_Wtime();
+    
     MPI_Gather(D, stripSize*n, MPI_DOUBLE, D, stripSize*n, MPI_DOUBLE, COORDINATOR, MPI_COMM_WORLD);
+
     commTimes[7] = MPI_Wtime();
 
     MPI_Reduce(commTimes, minCommTimes, 8, MPI_DOUBLE, MPI_MIN, COORDINATOR, MPI_COMM_WORLD);
 	MPI_Reduce(commTimes, maxCommTimes, 8, MPI_DOUBLE, MPI_MAX, COORDINATOR, MPI_COMM_WORLD);
-
-    MPI_Reduce(procTimes, minprocTimes, 6, MPI_DOUBLE, MPI_MIN, COORDINATOR, MPI_COMM_WORLD);
-	MPI_Reduce(procTimes, maxprocTimes, 6, MPI_DOUBLE, MPI_MAX, COORDINATOR, MPI_COMM_WORLD);
-
-    
-
 
     MPI_Finalize();
 
@@ -196,7 +184,7 @@ int main(int argc, char* argv[]){
         }
         totalTime = maxCommTimes[7] - minCommTimes[0];
         commTime = (maxCommTimes[1] - minCommTimes[0]) + (maxCommTimes[3] - minCommTimes[2]) + (maxCommTimes[5] - minCommTimes[4]) + (maxCommTimes[7] - minCommTimes[6]);		
-        procTime = (maxprocTimes[1] - minprocTimes[0]) + (maxprocTimes[3] - minprocTimes[2]) + (maxprocTimes[5] - minprocTimes[4]);    
+        procTime = (maxCommTimes[2] - minCommTimes[1]) + (maxCommTimes[4] - minCommTimes[3]) + (maxCommTimes[6] - minCommTimes[5]);    
         if(check){
             printf("Resultados Correctos\n");
             printf("Multiplicacion de matrices (N=%d)\tTiempo total=%lf\tTiempo comunicacion=%lf\tTiempo De Procesamiento=%lf\n",n,totalTime,commTime, procTime);
