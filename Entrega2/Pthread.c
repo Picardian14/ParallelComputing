@@ -51,11 +51,23 @@ void * min_max_avg(void *ptr)
                 a_local_min = A[i*N+j];
             if (a_local_max < A[i*N+j])
                 a_local_max = A[i*N+j];
+        }
+    }
+    for(int i=0; i < N ; i++)
+    {
+        for(int j=s; j<e;j++)
+        {
             b_local_cant+= B[i*N+j];
             if (b_local_min > B[i*N+j])
                 b_local_min = B[i*N+j];
             if (b_local_max < B[i*N+j])
                 b_local_max = B[i*N+j];
+        }
+    }
+    for(int i=0; i < N ; i++)
+    {
+        for(int j=s; j<e;j++)
+        {
             c_local_cant+= C[i*N+j];
             if (c_local_min > C[i*N+j])
                 c_local_min = C[i*N+j];
@@ -63,7 +75,6 @@ void * min_max_avg(void *ptr)
                 c_local_max = C[i*N+j];
         }
     }
-
     pthread_mutex_lock(&a_cant_mutex);
     a_cant+=a_local_cant;
     b_cant+=b_local_cant;    
@@ -88,7 +99,7 @@ void * min_max_avg(void *ptr)
         c_max = c_local_max;
     pthread_mutex_unlock(&a_max_mutex);
 
-
+    pthread_barrier_wait(&barrier);
     if(id == 0)
     {
         a_avg = (double)a_cant/(double)N;
@@ -112,7 +123,13 @@ void * min_max_avg(void *ptr)
         for(int j=0; j<N;j++)
         {
             for(int k=0;k < N; k++)
-                D[N*i+j] += temp_AB[N*i+k]*C[N*j+k];
+                D[N*i+j] += temp_AB[N*i+k]*C[N*j+k];            
+        }
+    }
+    for(int i=s; i < e ; i++)
+    {
+        for(int j=0; j<N;j++)
+        {            
             D[N*i+j] *= scalar;
         }
     }

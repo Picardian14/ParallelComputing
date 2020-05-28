@@ -82,11 +82,11 @@ int main(int argc, char* argv[]){
     
 	commTimes[1] = MPI_Wtime();
 
-    #pragma omp parallel num_threads(8) private(i) schedule(static) 
+    #pragma omp parallel private(i) 
     { 
         /* computo de los maximos, minimos y promedios*/
         //computo de A
-        #pragma omp for reduction(min:local_min[0]) reduction(max:local_max[0]) reduction(+:local_avg[0])
+        #pragma omp for reduction(min:local_min[0]) reduction(max:local_max[0]) reduction(+:local_avg[0]) schedule(static)
         for(i=0;i<stripSize*n;i++){
             if (local_min[0] > A[i])
                 local_min[0] = A[i];
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]){
             local_avg[0] += A[i];
         }
         
-        #pragma omp for reduction(min:local_min[1]) reduction(max:local_max[1]) reduction(+:local_avg[1])
+        #pragma omp for reduction(min:local_min[1]) reduction(max:local_max[1]) reduction(+:local_avg[1]) schedule(static)
         for(i=(rank*stripSize*n); i<(rank+1)*stripSize*n; i++){
             if (local_min[1] > B[i])
                 local_min[1] = B[i];
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]){
             local_avg[1] += B[i];
         }
 
-        #pragma omp for reduction(min:local_min[2]) reduction(max:local_max[2]) reduction(+:local_avg[2])
+        #pragma omp for reduction(min:local_min[2]) reduction(max:local_max[2]) reduction(+:local_avg[2]) schedule(static)
         for(i=(rank*stripSize*n); i<(rank+1)*stripSize*n; i++){
             if (local_min[2] > C[i])
                 local_min[2] = C[i];
@@ -148,10 +148,10 @@ int main(int argc, char* argv[]){
     //2da distribucion de datos (A ya fue distribuido)
 
     commTimes[5] = MPI_Wtime();
-    #pragma omp parallel num_threads(8) private(i,j,k) schedule(static) 
+    #pragma omp parallel private(i,j,k)
     { 
         //Computacion parcial
-        #pragma omp for
+        #pragma omp for schedule(static)
         for (i=0; i<stripSize; i++) {
             for (j=0; j<n ;j++ ) {
                 A_B[i*n+j]=0;
@@ -160,7 +160,7 @@ int main(int argc, char* argv[]){
                 }
             }
         }
-        #pragma omp for
+        #pragma omp for schedule(static)
         for (i=0; i<stripSize; i++) {
             for (j=0; j<n ;j++ ) {
                 D[i*n+j]=0;
