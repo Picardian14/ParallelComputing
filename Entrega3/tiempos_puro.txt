@@ -1,5 +1,24 @@
+1 Nucleo
 Multiplicacion de matrices (N=512)	Tiempo total=0.431849	Tiempo comunicacion=0.031860Tiempo De Procesamiento=0.404542
 Multiplicacion de matrices (N=1024)	Tiempo total=3.390956	Tiempo comunicacion=0.109584Tiempo De Procesamiento=3.311870
 Multiplicacion de matrices (N=2048)	Tiempo total=27.043561	Tiempo comunicacion=0.850256Tiempo De Procesamiento=26.725580
 Multiplicacion de matrices (N=4096)	Tiempo total=221.658607	Tiempo comunicacion=10.390366Tiempo De Procesamiento=220.357581
+
+2 Nucleos
+Multiplicacion de matrices (N=512)	Tiempo total=0.292797	Tiempo comunicacion=0.127117Tiempo De Procesamiento=0.237426
+Multiplicacion de matrices (N=1024)	Tiempo total=2.007289	Tiempo comunicacion=0.401943Tiempo De Procesamiento=1.699345
+Multiplicacion de matrices (N=2048)	Tiempo total=14.651164	Tiempo comunicacion=1.687116Tiempo De Procesamiento=13.526672
+Multiplicacion de matrices (N=4096)	Tiempo total=115.010524	Tiempo comunicacion=9.962562Tiempo De Procesamiento=110.752338
+
+4 Nucleos
+Multiplicacion de matrices (N=512)	Tiempo total=0.221679	Tiempo comunicacion=0.162376Tiempo De Procesamiento=0.142074
+Multiplicacion de matrices (N=1024)	Tiempo total=1.205848	Tiempo comunicacion=0.443084Tiempo De Procesamiento=0.887369
+Multiplicacion de matrices (N=2048)	Tiempo total=8.256069	Tiempo comunicacion=1.923462Tiempo De Procesamiento=6.877978
+Multiplicacion de matrices (N=4096)	Tiempo total=59.900323	Tiempo comunicacion=7.955428Tiempo De Procesamiento=54.387261
+
+
+
+
+
+
 
