@@ -1,0 +1,15 @@
+Tamanio: 512 -- Threads: 2 -- Tiempo de ejecucion: 1.588470
+Tamanio: 1024 -- Threads: 2 -- Tiempo de ejecucion: 12.941779
+Tamanio: 2048 -- Threads: 2 -- Tiempo de ejecucion: 103.353616
+Tamanio: 4096 -- Threads: 2 -- Tiempo de ejecucion: 832.659875
+
+Tamanio: 512 -- Threads: 4 -- Tiempo de ejecucion: 0.796050
+Tamanio: 1024 -- Threads: 4 -- Tiempo de ejecucion: 6.488575
+Tamanio: 2048 -- Threads: 4 -- Tiempo de ejecucion: 51.826937
+Tamanio: 4096 -- Threads: 4 -- Tiempo de ejecucion: 417.308632
+
+Tamanio: 512 -- Threads: 8 -- Tiempo de ejecucion: 0.402421
+Tamanio: 1024 -- Threads: 8 -- Tiempo de ejecucion: 3.245255
+Tamanio: 2048 -- Threads: 8 -- Tiempo de ejecucion: 25.863940
+Tamanio: 4096 -- Threads: 8 -- Tiempo de ejecucion: 209.119976
+

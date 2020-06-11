@@ -16,11 +16,15 @@ double dwalltime(){
 //Funcion que calcula el maximo de una matriz
 double max (double * matriz, int N ){
     double max=-1;
-    int i;
+    int i,j;
     
-    for (i=0;i<N*N;i++)
-        if (matriz[i] < max)
-            max=matriz[i];
+    for (i=0;i<N;i++){
+        for(j=0; j < N; j++){
+            if (matriz[i*N+j] > max)           
+                max=matriz[i*N+j];
+            }
+    }
+
 
     return max;
 }
@@ -28,22 +32,25 @@ double max (double * matriz, int N ){
 //Funcion que calcula el minimo de una matriz
 double min (double * matriz, int N ){
     double min=101;
-    int i;
+    int i,j;
     
-    for (i=0;i<N*N;i++)
-        if (matriz[i] < min)
-            min=matriz[i];
-    
+    for (i=0;i<N;i++){
+        for(j=0; j < N; j++){
+            if (matriz[i*N+j] < min)           
+                min=matriz[i*N+j];
+            }
+    }
     return min;
 }
 
 //Funcion que calcula el promedio de una matriz
 double avg (double * matriz, int N ){
     double avg=0;
-    int i;
+    int i, j;
 
-    for (i=0;i<N*N;i++)
-        avg += matriz[i];
+    for (i=0;i<N;i++)
+        for(j=0; j<N; j++)
+            avg += matriz[i*N+j];
 
     avg = avg/(N*N);
     return avg;
@@ -51,7 +58,7 @@ double avg (double * matriz, int N ){
 
 int main(int argc,char*argv[]){
 
- double *A,*B,*C,*D,*resul_intermedio,maxA,maxB,maxC,minA,minB,minC,avgA,avgB,avgC;
+ double *A,*B,*C,*D,*resul_intermedio,maxA,maxB,maxC,minA,minB,minC,avgA,avgB,avgC, row, col;
  int cons,i,j,k,s,check=1;
  double timetick;
 
@@ -74,8 +81,19 @@ int main(int argc,char*argv[]){
  //las unicas que accederia por colomnas serian B y C pero como estas son la matris identidad es lo mismo accederlas por filas o columnas
 
  
-
- 
+for(int row=0; row < N; row++){
+        for(int col=0 ; col < N; col++){
+            A[N*row+col] = rand()%100;
+            if (row == col){
+                C[N*row+col] = 1.0;
+                B[N*row+col] = 1.0;
+            }else{                
+                B[N*row+col] = 0;
+                C[N*row+col] = 0;
+            }
+        }
+    }
+ /*
  for(i=0;i<(N*N);i++){
 	A[i]=rand()%100;
     B[i]=0.0;
@@ -87,8 +105,9 @@ int main(int argc,char*argv[]){
 	for (i=0; i<N; i++){
 		B[i*N+i]= 1.0;
         C[i*N+i]= 1.0;
-	}
+	}*/
  //Calculo los maximos, minimos y promedios
+ timetick = dwalltime();
  maxA = max(A,N);
  maxB = max(B,N);
  maxC = max(C,N);
@@ -105,7 +124,6 @@ int main(int argc,char*argv[]){
  //calculo el producto de matrices
 
  //Realizo la primera parte de la multiplicacion resul_intermedio= A*B
-  timetick = dwalltime();
 
   for(i=0;i<N;i++){
    for(j=0;j<N;j++){

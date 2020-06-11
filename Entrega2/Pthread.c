@@ -42,9 +42,9 @@ void * min_max_avg(void *ptr)
     int L = N / T; //secciono segun la canitdad de threads
     s = id*L;
     e = (N % 2 ==1 && id == T-1) ? ((id+1)*L)+1 : (id+1)*L;
-    for(int i=0; i < N ; i++)
+    for(int i=s; i < e ; i++)
     {
-        for(int j=s; j<e;j++)
+        for(int j=0; j<N;j++)
         {
             a_local_cant+= A[i*N+j];
             if (a_local_min > A[i*N+j])
@@ -57,22 +57,22 @@ void * min_max_avg(void *ptr)
     {
         for(int j=s; j<e;j++)
         {
-            b_local_cant+= B[i*N+j];
-            if (b_local_min > B[i*N+j])
-                b_local_min = B[i*N+j];
-            if (b_local_max < B[i*N+j])
-                b_local_max = B[i*N+j];
+            b_local_cant+= B[i+N*j];
+            if (b_local_min > B[i+N*j])
+                b_local_min = B[i+N*j];
+            if (b_local_max < B[i+N*j])
+                b_local_max = B[i+N*j];
         }
     }
     for(int i=0; i < N ; i++)
     {
         for(int j=s; j<e;j++)
         {
-            c_local_cant+= C[i*N+j];
-            if (c_local_min > C[i*N+j])
-                c_local_min = C[i*N+j];
-            if (c_local_max < C[i*N+j])
-                c_local_max = C[i*N+j];
+            c_local_cant+= C[i+N*j];
+            if (c_local_min > C[i+N*j])
+                c_local_min = C[i+N*j];
+            if (c_local_max < C[i+N*j])
+                c_local_max = C[i+N*j];
         }
     }
     pthread_mutex_lock(&a_cant_mutex);
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
         pthread_join(threads[t], NULL);
     }*/
     ticktick = dwalltime() - ticktick;
-    printf("Tiempo de ejecucion: %f", ticktick);
+    printf("Tamanio: %d -- Threads: %d -- Tiempo de ejecucion: %f\n",N, T, ticktick);
     free(A);
     free(B);
     free(C);

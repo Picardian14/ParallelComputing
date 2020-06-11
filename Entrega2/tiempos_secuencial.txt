@@ -1,0 +1,4 @@
+Tiempo en segundos de procesamiento de matriz 512x512 : 3.217601
+Tiempo en segundos de procesamiento de matriz 1024x1024 : 26.031714
+Tiempo en segundos de procesamiento de matriz 2048x2048 : 207.537321
+Tiempo en segundos de procesamiento de matriz 4096x4096 : 1671.372037
